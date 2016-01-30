@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>TreeDataView.js Example</title>
+  <link rel="stylesheet" href="src/fonts/awesome.css">
+  <link href='https://fonts.googleapis.com/css?family=Signika:400,600,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="src/css/TreeDataView.css">
+  <script src="src/js/jquery-1.12.0.min.js"></script>
+  <script src="src/js/TreeDataView.js"></script>
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: #333;
+      -webkit-transition: 0.2s ease;
+      -moz-transition: 0.2s ease;
+      transition: 0.2s ease;
+    }
+    a:hover {
+      color: #4DAF7F;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      text-align: center;
+      font-family: 'Signika', sans-serif;
+    }
+    .header h1 {
+      margin: 0;
+      padding: 10px;
+      font-size: 32px;
+      background-color: whitesmoke;
+    }
+    .version {
+      font-size: 18px;
+      position: relative;
+      top: -15px;
+      left: 5px;
+    }
+    .grid-wrapper {
+      width: 1024px;
+      margin: 15px auto;
+    }
+    .grid-row {
+      margin-left: -7.5px;
+      margin-right: -7.5px;
+    }
+    .grid-row:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+    .grid-column {
+      width: 33.33333333%;
+      padding: 0 7.5px;
+      float: left;
+    }
+    .grid-column-12 {
+      width: 100%;;
+    }
+    .tree-wrapper {
+      margin-bottom: 15px;
+    }
+    .tree-header {
+      padding: 15px;
+      font-family: 'Signika', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      background: #333;
+      color: #FFF;
+      text-transform: uppercase;
+    }
+    .tree-header__info {
+      background: #4DAF7C;
+    }
+    .fa-minus-circle + .tree-view-circle,
+    .fa-plus-circle + .tree-view-circle {
+      left: -8px;
+    }
+    .code {
+      margin: 10px 0;
+      padding: 15px;
+      line-height: 20px;
+      font-size: 14px;
+      background: #F1F1F1;
+      border: 1px solid #EAEAEA;
+      color: #333;
+      overflow-x: auto;
+    }
+    .code pre {
+      display: none;
+      margin: 0;
+    }
+    .show-code {
+      display: block;
+      margin: 0 auto;
+      width: 100px;
+      padding: 5px;
+      font-family: 'Signika', sans-serif;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      background: #333;
+      color: #FFF;
+    }
+    .show-code:hover {
+      color: #4DAF7F;
+    }
+  </style>
+  <script>
+
+
+ $(document).ready(function() {
+
+
+   $('.js-show-code').on('click', function () {
+     var $code = $(this).parent('.code');
+     $(this).hide(0);
+     $code.find('pre').show(0);
+   });
+
+
+   var data = [
+     {
+       title: 'Parent',
+       customObject: {
+         country: 'Russia'
+       },
+       nodes: [
+         {title: 'Children'},
+         {title: 'Children',
+           nodes: [
+             {title: 'Children level 2',
+               nodes: [
+               {title: 'Children level 3'},
+               {title: 'Children level 3',
+                 nodes: [
+                 {title: 'Children level 4'},
+                 {title: 'Children level 4'}
+               ]}
+             ]},
+             {title: 'Children level 2'},
+             {title: 'Children level 2'},
+             {title: 'Children level 2'}
+           ]
+         },
+         {title: 'Children'},
+         {title: 'Children'}
+       ]
+     },
+     {title: 'Parent'},
+     {title: 'Parent'}
+   ];
+
+
+   var dataCountry = {
+     country: 'Russia',
+     nodes: [
+       {city: {
+         title: 'Moscow',
+         population: '20.2m'
+       }},
+       {city: {
+         title: 'Saint Petersburg',
+         population: '6.5m'
+       }},
+       {city: {
+         title: 'Novosibirsk',
+         population: '1.81m'
+       }},
+       {city: {
+         title: 'Yekaterinburg',
+         population: '1.62m'
+       }},
+       {city: {
+         title: 'Samara',
+         population: '1.45m'
+       }},
+       {city: {
+         title: 'Omsk',
+         population: '1.4m'
+       }},
+       {city: {
+         title: 'Kazan',
+         population: '1.2m'
+       }}
+     ]
+   };
+
+
+   var tree = new TreeDataView({
+     append: $('#tree-example-1'),
+   }, data);
+   tree.render();
+
+   var tree2 = new TreeDataView({
+     append: $('#tree-example-2'),
+     openLevel: 2
+   }, data);
+   tree2.render();
+
+   var tree3 = new TreeDataView({
+     append: $('#tree-example-3'),
+     openLevel: 'all'
+   }, data);
+   tree3.render();
+
+   var data2 = $.extend(true, [], data);
+   data2[0]['nodes'][1]['_node-disabled'] = true;
+   var tree4 = new TreeDataView({
+     append: $('#tree-example-4'),
+     openLevel: 2
+   }, data2);
+   tree4.render();
+
+   var data3 = $.extend(true, [], data);
+   data3[0]['nodes'][1]['nodes'][0]['_node-selected'] = true;
+   var tree5 = new TreeDataView({
+     append: $('#tree-example-5')
+   }, data3);
+   tree5.render();
+
+   var tree6 = new TreeDataView({
+     append: $('#tree-example-6'),
+     iconClasses: {
+       open: 'fa-plus-circle',
+       close: 'fa-minus-circle'
+     }
+   }, data);
+   tree6.render();
+
+   var tree7 = new TreeDataView({
+     append: $('#tree-example-7'),
+     slidingDuration: 500
+   }, data);
+   tree7.render();
+
+   var tree8 = new TreeDataView({
+     append: $('#tree-example-8'),
+     count: true
+   }, data);
+   tree8.render();
+
+   var tree9 = new TreeDataView({
+     append: $('#tree-example-9'),
+     count: true,
+     countCallback: function(count) {
+       if(count > 10) {
+         return '10+';
+       }
+       else if(count > 5) {
+         return '5+';
+       }
+       return count;
+     }
+   }, data);
+   tree9.render();
+
+   var tree10 = new TreeDataView({
+     append: $('#tree-example-10'),
+     template: '<span><i style="margin-right: 10px;" class="fa fa-child"></i>' +
+     '{{ country }}' +
+     ' {{ city.title }}' +
+     ' {{ city.population }}</span>'
+   }, dataCountry);
+   tree10.render();
+
+   var tree11 = new TreeDataView({
+     append: $('#tree-example-11'),
+   }, data);
+   tree11.render();
+
+   var tree12 = new TreeDataView({
+     append: $('#tree-example-12'),
+   }, data);
+   tree12.render();
+   console.info(tree12.getNodes(3, 'object'));
+   console.info(tree12.getNodes(3, 'html'));
+   console.info(tree12.getNodes(3, 'json'));
+
+
+   var tree13 = new TreeDataView({
+     append: $('#tree-example-13'),
+   }, data);
+   tree13.render();
+
+   var tree14 = new TreeDataView({
+     append: $('#tree-example-14'),
+     count: true,
+     theme: 'dark'
+   }, data);
+   tree14.render();
+
+
+   var tree15 = new TreeDataView({
+     append: $('#tree-example-15'),
+     count: true,
+     theme: 'color'
+   }, data);
+   tree15.render();
+
+
+   // Events example
+   var $containerEvents = $('#tree-example-11');
+   $containerEvents.on('selected', '.tree-view-element', function(event) {
+     console.log('selected');
+     console.log(this);
+   });
+   $containerEvents.on('unselected', '.tree-view-element', function(event) {
+     console.log('unselected');
+   });
+   $containerEvents.on('opening', '.tree-view-action', function(event, data) {
+     console.log('opening')
+     console.info(data)
+   });
+   $containerEvents.on('opened', '.tree-view-action', function(event, data) {
+     console.log('opened')
+   });
+   $containerEvents.on('closesing', '.tree-view-action', function(event, data) {
+     console.log('closesing')
+   });
+   $containerEvents.on('closest', '.tree-view-action', function(event, data) {
+     console.log('closest')
+   });
+
+
+
+ })
+
+
+
+  </script>
+</head>
+<body>
+<div class="header">
+  <h1><a href="https://github.com/M-Ulyanov/TreeDataView">TreeDataView.js<span class="version">1.0</span></a></h1>
+</div>
+<div class="grid-wrapper">
+  <div class="grid-row">
+
+    <div class="grid-column">
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Default</div>
+        <div class="tree-example" id="tree-example-1"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-1')
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Disabled Node</div>
+        <div class="tree-example" id="tree-example-4"></div>
+      </div>
+      <div class="code">
+      <div class="js-show-code show-code">Show code</div>
+<pre>
+// Node have field ['_node-disabled']
+var tree = new TreeDataView({
+  append: $('#tree-example-4'),
+  openLevel: 2
+}, data);
+tree.render();
+</pre>
+      </div>
+      <!-- end tree wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Sliding Duration</div>
+        <div class="tree-example" id="tree-example-7"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-7'),
+  slidingDuration: 400
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Custom Template</div>
+        <div class="tree-example" id="tree-example-10"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree10 = new TreeDataView({
+  append: $('#tree-example-10'),
+  template: '&lt;span>&lt;i style="margin-right: 10px;" class="fa fa-child">&lt;/i>' +
+  ' {{ country }}' +
+  ' {{ city.title }}' +
+  ' {{ city.population }}&lt;/span>'
+}, dataCountry);
+tree10.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Default theme</div>
+        <div class="tree-example" id="tree-example-13"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-13'),
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+    </div>
+    <!-- end grid-column-->
+
+
+    <div class="grid-column">
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Open two level</div>
+        <div class="tree-example" id="tree-example-2"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-2'),
+  openLevel: 2
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Selected Node</div>
+        <div class="tree-example" id="tree-example-5"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+// Node have field ['_node-selected']
+var tree = new TreeDataView({
+  append: $('#tree-example-5'),
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- start end wrapper-->
+
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Count nodes</div>
+        <div class="tree-example" id="tree-example-8"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree8 = new TreeDataView({
+  append: $('#tree-example-8'),
+  count: true
+}, data);
+tree8.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Events (print console)</div>
+        <div class="tree-example" id="tree-example-11"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree11 = new TreeDataView({
+  append: $('#tree-example-11'),
+}, data);
+tree11.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+      <!-- start tree wrapper-->
+      <div class="tree-wrapper">
+        <div class="tree-header">Dark theme</div>
+        <div class="tree-example" id="tree-example-14"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree14 = new TreeDataView({
+  append: $('#tree-example-14'),
+  count: true
+  theme: 'dark'
+}, data);
+tree14.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper-->
+
+
+    </div>
+    <!-- end grid column -->
+
+
+
+    <div class="grid-column">
+
+      <!-- start tree wrapper -->
+      <div class="tree-wrapper">
+        <div class="tree-header">Open all</div>
+        <div class="tree-example" id="tree-example-3"></div>
+        <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-3'),
+  openLevel: 'all'
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper -->
+
+
+      <!-- start tree wrapper -->
+      <div class="tree-wrapper">
+        <div class="tree-header">Custom icons</div>
+        <div class="tree-example" id="tree-example-6"></div>
+        <div class="code">
+          <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree = new TreeDataView({
+  append: $('#tree-example-6'),
+  iconClasses: {
+    open: 'fa-plus-circle',
+    close: 'fa-minus-circle'
+  }
+}, data);
+tree.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper -->
+
+
+      <!-- start tree wrapper -->
+      <div class="tree-wrapper">
+        <div class="tree-header">Count nodes callback</div>
+        <div class="tree-example" id="tree-example-9"></div>
+        <div class="code">
+          <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree9 = new TreeDataView({
+  append: $('#tree-example-9'),
+  count: true,
+  countCallback: function(count) {
+  if(count > 10) {
+   return '10+';
+  }
+  else if(count > 5) {
+   return '5+';
+  }
+  return count;
+  },
+}, data);
+tree9.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper -->
+
+      <!-- start tree wrapper -->
+      <div class="tree-wrapper">
+        <div class="tree-header">Get data (print console)</div>
+        <div class="tree-example" id="tree-example-12"></div>
+        <div class="code">
+          <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree12 = new TreeDataView({
+ append: $('#tree-example-12'),
+}, data);
+tree12.render();
+console.info(tree12.getNodes(3, 'object'));
+console.info(tree12.getNodes(3, 'html'));
+console.info(tree12.getNodes(3, 'json'));
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper -->
+
+      <!-- start tree wrapper -->
+      <div class="tree-wrapper">
+        <div class="tree-header">Color theme</div>
+        <div class="tree-example" id="tree-example-15"></div>
+        <div class="code">
+          <div class="js-show-code show-code">Show code</div>
+<pre>
+var tree15 = new TreeDataView({
+  append: $('#tree-example-15'),
+  count: true,
+  theme: 'color'
+}, data);
+tree15.render();
+</pre>
+        </div>
+      </div>
+      <!-- end tree wrapper -->
+
+
+    </div>
+    <!-- end grid column -->
+
+
+  </div>
+  <!-- end grid row -->
+
+
+  <div class="grid-row">
+    <div class="grid-column grid-column-12">
+      <div class="tree-wrapper">
+        <div class="tree-header tree-header__info">Support format - Object, Array, JSON</div>
+      </div>
+      <div class="code">
+        <div class="js-show-code show-code">Show code</div>
+<pre>
+  // Object
+  var data = {
+    title: 'Parent',
+    nodes: [
+     {title: 'Children'},
+     {title: 'Children'}
+    ]
+  };
+
+  // Array
+  var data = [
+    {title: 'Parent'},
+    {title: 'Parent}
+  ];
+
+  // JSON
+  var data = '{"title":"Parent","nodes":[{"title":"Children"},{"title":"Children"}]}';
+
+  new TreeDataView({}, data);
+</pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
